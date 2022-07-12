@@ -76,3 +76,108 @@ activities.addEventListener('change',(e)=>{
 bitcoin.hidden = true;
 paypal.hidden = true;
 
+payment.children[1].setAttribute('selected', true);
+payment.addEventListener('change',(e)=> {
+        if (e.target.value === 'paypal') {
+          paypal.hidden = false;
+          bitcoin.hidden = true;
+          creditCard.hidden= true;
+        } else if (e.target.value==='bitcoin') {
+          bitcoin.hidden = false;
+          paypal.hidden = true;
+          creditCard.hidden = true;
+        } else {
+          paypal.hidden = true;
+          bitcoin.hidden = true;
+          creditCard.hidden = false;
+        }
+    });
+
+//Form Validation: Users will not be allowed to submit form without the required information.
+form.addEventListener('submit', (e) => {
+    function NameValid() {
+        console.log(nameElement.value)
+        return regexName = /^[a-zA-z ,.'-]+$/.test(nameElement.value);
+    };
+    function EmailValid() {
+        console.log(email.value)
+        return regexEmail = /^[^@]+@[^@]+\.[a-z]+$/i.test(email.value);
+    };
+    function ActivityChecked() {
+        if (totalCost === 0) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+    function CCNumValid() {
+        console.log(ccNum.value)
+        return regexCCNum = /^\d{13,16}$/.test(ccNum.value);
+    };
+    function ZipValid() {
+        console.log(zip.value)
+        return regexZip = /^\d{5}$/.test(zip.value);
+    };
+    function CVVValid() {
+        console.log(cvv.value)
+        return regexCVV = /^\d{3}$/.test(cvv.value);
+    };
+
+     if (!NameValid()) {
+         e.preventDefault();
+         notValid(nameElement);
+        } else {
+            isValid(nameElement);
+        };
+       if (!EmailValid()) {
+           e.preventDefault();
+           notValid(email);
+       } else {
+           isValid(email);
+       };
+       if (!ActivityChecked()) {
+           e.preventDefault();
+           notValid(activitiesBox);
+       } else {
+           isValid(activitiesBox);
+       };
+       if (payment.children[1].selected === true) {
+           if (!CCNumValid()) {
+               e.preventDefault();
+               notValid(ccNum);
+           } else {
+               isValid(ccNum);
+           };
+           if (!ZipValid()) {
+               e.preventDefault();
+               notValid(zip);
+           } else {
+               isValid(zip);
+           };
+           if (!CVVValid()) {
+               e.preventDefault();
+               notValid(cvv);
+           } else {
+               isValid(cvv);
+           };
+       };
+   });
+   function notValid(field) {
+       field.parentNode.classList.add('not-valid');
+       field.parentNode.classList.remove('valid');
+       field.parentNode.lastElementChild.style.display = 'block';
+   }
+   function isValid(field) {
+       field.parentNode.classList.add('valid');
+       field.parentNode.classList.remove('not-valid');
+       field.parentNode.lastElementChild.style.display = 'none';
+   }
+   //Checkboxes in "Register for Activitiy" section are in focus to imporve accessibility.
+   for (let i = 0; i < checkbox.length; i++) {
+       checkbox[i].addEventListener('focus', (e) => {
+           checkbox[i].parentNode.classList.add('focus');
+       });
+       checkbox[i].addEventListener('blur', (e) => {
+           checkbox[i].parentNode.classList.remove('focus');
+       });
+   };         
